@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">3D Reconstruction</string>
+    <string name="capture">Capture Video</string>
+    <string name="viewVideo">View Video</string>
+</resources>
