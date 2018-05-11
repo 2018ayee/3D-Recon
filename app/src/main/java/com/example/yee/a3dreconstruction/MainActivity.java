@@ -2,6 +2,8 @@ package com.example.yee.a3dreconstruction;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.VideoView;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mCaptureButton = (Button) findViewById(R.id.capturebutton);
+        mVideoView = (VideoView) findViewById(R.id.viewbutton);
+        MediaController mediaController = new MediaController(this);
+        mediaController.setAnchorView(mVideoView);
+        mVideoView.setMediaController(mediaController);
+        mVideoView.setBackgroundResource(R.drawable.hero);
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dispatchTakeVideoIntent();
@@ -31,26 +39,17 @@ public class MainActivity extends AppCompatActivity {
     private void dispatchTakeVideoIntent() {
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            Log.d("Start", "Opened Video");
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
-                Uri result = data.getData();
-                Log.d("Result", result.toString());
-//                Uri videoUri = intent.getData();
-//                Log.d("ResultReceived", "" + videoUri.toString());
-//                Log.d("Set to Video", "" + intent.toString());
-//                mVideoView.setVideoURI(videoUri);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-                Log.d("Result", "Failed");
-            }
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            Uri videoUri = intent.getData();
+            Log.d("Video URI", videoUri.toString());
+            mVideoView.setVideoURI(videoUri);
+            mVideoView.setBackgroundColor(Color.TRANSPARENT);
+            mVideoView.start();
         }
-    }//onActivityResult
+    }
 }
