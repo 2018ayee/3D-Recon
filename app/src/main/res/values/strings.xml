@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">3D Reconstruction</string>
-    <string name="capture">Capture Video</string>
+    <string name="capture">Capture</string>
+    <string name="send">Upload</string>
     <string name="viewVideo">View Video</string>
+    <string name="choose">Choose</string>
 </resources>
